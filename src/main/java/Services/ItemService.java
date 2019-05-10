@@ -93,7 +93,8 @@ public class ItemService {
         }
     }
 
-    public static void getItems() {
+    public static ArrayList<Item> getItems() {
+        ArrayList<Item> items = new ArrayList<>();
         SearchRequest searchRequest = new SearchRequest(Connection.INDEX);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchAllQuery());
@@ -108,8 +109,9 @@ public class ItemService {
 
         SearchHits hits = searchResponse.getHits();
         for (SearchHit hit : hits.getHits()) {
-            System.out.println(hit.getSourceAsMap());
+            items.add(Connection.objectMapper.convertValue(hit.getSourceAsMap(), Item.class));
         }
+        return items;
     }
 
 }
